@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="GET">
+    filter: <input type="text" name="search"><br/>
+    <input type="submit" value="Submit" />
+</form><br/><br/>
+
+
+{% for i in questions %}
+<p>{{i.title}}</p>
+<p>{{i.description}}</p>
+<img src="{{i.image.url}}"/>
+{% endfor %}
+
+</body>
+</html>

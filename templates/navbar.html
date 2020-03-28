@@ -1,0 +1,163 @@
+{% load cart_template_tags %}
+{% load i18n %}
+
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar" style="height: 80px;">
+    <div class="container">
+
+      <!-- Brand -->
+      <a class="navbar-brand waves-effect" href="/">
+        <strong class="blue-text">{% trans 'DJ' %}{% trans 'E-commerce' %}</strong>
+      </a>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-160648367-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-160648367-1');
+</script>
+
+      <!-- Collapse -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1"
+        aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Links -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent1">
+
+        <!-- Left -->
+        <ul class="navbar-nav mr-auto">
+          {% comment %} <li class="nav-item active">
+            <a class="nav-link waves-effect" href="/">Home
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link waves-effect" href="/checkout">
+            Checkout</a>
+          </li> {% endcomment %}
+        </ul>
+        <!-- Right -->
+        <ul class="navbar-nav nav-flex-icons">
+              <li class="nav-item mt-2">
+                {% get_current_language as LANGUAGE_CODE %}
+                <form action="{% url 'set_language' %}" method="post">
+                  {%csrf_token%}
+                  <input type="hidden" name="text" value="{{redirect_to}}" />
+                  <select class="selectpicker" name="language" id="" onchange="this.form.submit()">
+                    {% get_available_languages as LANGUAGES %}
+                    {% get_language_info_list for LANGUAGES as languages %}
+                    {% for language in languages %}
+                    <option value="{{language.code}}" {% if language.code == LANGUAGE_CODE %} selected {%endif%}>
+                      {{language.name_local}} ({{ language.code }})
+                    </option>
+                    {%endfor%}
+                  </select>
+                </form>
+              </li>
+
+
+          {% if request.user.is_authenticated %}
+          <li class="nav-item">
+            <a href="{% url 'core:order-summary' %}" class="nav-link waves-effect">
+              <span class="badge red z-depth-1 mr-1"> {{ request.user|cart_item_count }} </span>
+              <i class="fas fa-shopping-cart"></i>
+              <span class="clearfix d-none d-sm-inline-block"> {% trans 'Cart' %} </span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link waves-effect" href="{% url 'account_logout' %}">
+              <span class="clearfix d-none d-sm-inline-block"> {% trans 'Logout' %} </span>
+            </a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link waves-effect" href="{% url 'account_login' %}">
+              <span class="clearfix d-none d-sm-inline-block"> {% trans 'Login' %} </span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link waves-effect" href="{% url 'account_signup' %}">
+              <span class="clearfix d-none d-sm-inline-block">{% trans 'Signup' %}  </span>
+            </a>
+          </li>
+              {% endif %}
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary" id="navbar">
+  <a class="navbar-brand" href="#">Mega Dropdown</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'core:home' %}">{% trans 'All' %}</a>
+      </li>
+        {% for i in title %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'core:contact' %}">{{i.title}}</a>
+      </li>
+        {%endfor%}
+{% for i in NavView %}
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{i.category}}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+          <div class="container">
+            <div class="row">
+              <div class="col-md-4">
+                <ul class="nav flex-column">
+{%for x in SubCategory%}
+    {% if x.category_id == i.id %}
+                <li class="nav-item">
+                  <a class="nav-link active" href="{% url 'core:s_product' x.id%}">{{x.SubCategory}}</a>
+                </li>
+                    {%endif%}
+{%endfor%}
+              </ul>
+              </div>
+              <!-- /.col-md-4  -->
+              <div class="col-md-4">
+                <a href="">
+                  <img src="{{x.image.url}}" alt="" class="img-fluid">
+                </a>
+                <p class="text-white">Short image call to action</p>
+
+              </div>
+              <!-- /.col-md-4  -->
+            </div>
+          </div>
+          <!--  /.container  -->
+
+
+        </div>
+      </li>
+{%endfor%}
+    </ul>
+    <form class="form-inline" action="{% url 'core:search_results' %}" method="get">
+      <div class="md-form my-0">
+        <input name="q" class="form-control mr-sm-2" type="text" placeholder="{% trans 'Search' %}" aria-label="Search">
+      </div>
+    </form>
+  </div>
+
+
+</nav>

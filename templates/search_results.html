@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load i18n %}
+
+<h1>{% trans 'Search Results' %}</h1>
+
+
+    <div class="container-fluid">
+    <div class="row">
+
+  {% for i in object_list_search %}
+        <div class="col-lg-3">
+            <div class="card" style="width: 18rem;">
+                <p class="lead text-center">{% trans 'category is ' %}: <span style="color:red;">{{i.category}}</span></p>
+                <p class="lead text-center">{% trans 'Sub category is' %}: <span style="color:red;">{{i.SubCategory}}</span></p>
+              <img class="card-img-top" src="{{i.image.url}}" alt="Card image cap">
+              <div class="card-body">
+                <h5 class="card-title">{{i.title}}</h5>
+                  <h6 class="card-title" style="color:red;" >{{i.price}}</h6>
+                <p class="card-text">{{i.description}}</p>
+                <a href="{{ i.get_absolute_url }}" class="btn btn-primary">Go somewhere</a>
+              </div>
+            </div>
+        </div>
+  {% endfor %}
+
+</div>
+</div>
+{% endblock content %}
